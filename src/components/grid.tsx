@@ -45,7 +45,10 @@ const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
   // some basic styles to make the items look a bit nicer
   userSelect: "none",
   padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
+  margin: `${grid}px`,
+  borderColor: "red",
+  borderStyle: "solid",
+  minWidth: "125px",
 
   // change background colour if dragging
   background: isDragging ? "lightgreen" : "grey",
@@ -56,13 +59,14 @@ const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
 const getListStyle = (isDraggingOver: boolean) => ({
   background: isDraggingOver ? "lightblue" : "lightgrey",
   padding: grid,
-  width: 250
+  display: 'flex',
+  overflow: 'auto',
 })
 
 const Grid = () => {
   const [state, setState] = useState<Node[][]>([])
   useEffect(() => {
-    const s = [getItems(10), getItems(5, 10)]
+    const s = [getItems(5), getItems(3, 5)]
     setState(s)
   }, [])
 
@@ -99,7 +103,7 @@ const Grid = () => {
           setState([...state, []])
         }}
       >
-        Add new group
+        Add new row
       </button>
       <button
         type="button"
@@ -109,10 +113,10 @@ const Grid = () => {
       >
         Add new item
       </button>
-      <div style={{ display: "flex" }}>
+      <div>
         <DragDropContext onDragEnd={onDragEnd}>
           {state.map((el, ind) => (
-            <Droppable key={ind} droppableId={`${ind}`}>
+            <Droppable key={ind} droppableId={`${ind}`} direction='horizontal'>
               {(provided, snapshot) => (
                 <div
                   ref={provided.innerRef}
